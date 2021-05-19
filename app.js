@@ -1,14 +1,7 @@
-const express = require('express');
-
 require('dotenv').config();
 
-const app = express();
-const port = process.env.PORT;
+const Server = require('./models/server');
+const server = new Server();
 
-app.get('/', (req, res) => {
-    res.send('hi world');
-});
-
-app.listen(port, () => {
-    console.log(`Servidor escuchando en el puerto ${port}`);
-});
+//Se inicializa la appweb y se pone a escuchar por el puerto
+server.listen();
