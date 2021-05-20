@@ -9,6 +9,7 @@
   "author": "Pablo Barba",
   "license": "ISC",
   "dependencies": {
+    "cors": "^2.8.5",
     "dotenv": "^9.0.2",
     "express": "^4.17.1"
   }
