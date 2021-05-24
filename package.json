@@ -10,9 +10,11 @@
   "author": "Pablo Barba",
   "license": "ISC",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "dotenv": "^9.0.2",
     "express": "^4.17.1",
+    "express-validator": "^6.11.1",
     "mongoose": "^5.12.10"
   }
 }
