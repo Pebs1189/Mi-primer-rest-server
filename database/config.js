@@ -10,7 +10,8 @@ const dbConnection = async () => {
             useNewUrlParser:true,
             useUnifiedTopology: true,
             useCreateIndex: true,
-            useFindAndModify: false
+            useFindAndModify: false,
+            family: 4
         });
 
         console.log('DB online');
