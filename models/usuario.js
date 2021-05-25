@@ -32,7 +32,7 @@ const UsuarioSchema = Schema ({
     }
 });
 
-//Quita del esquema el password y la verisón
+//Quita del esquema el password y la versión
 UsuarioSchema.methods.toJSON = function () {
     const {__v, password, ...usuario} = this.toObject();
     return usuario;
