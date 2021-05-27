@@ -71,7 +71,7 @@ const usuariosDelete = async (req, res = response) => {
     
     const usuarioAutenticado = req.usuario;
 
-    res.json({usuario, usuarioAutenticado});
+    res.json(usuario);
 };
 
 module.exports = {
