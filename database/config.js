@@ -1,7 +1,5 @@
 const mongoose = require('mongoose');
 
-require('dotenv').config({path:'./.env'});
-
 const dbConnection = async () => {
     try {
         const mongoCDN = process.env.MONGODB_CNN;

@@ -26,7 +26,7 @@ const usuariosGet = async (req, res = response) => {
 
 const usuariosPut = async (req, res = response) => {
     const {id} = req.params;
-    const {_id, password, google, ...resto} = req.body;
+    const {uid, password, google, ...resto} = req.body;
 
     //TODO validar contra BD
     if (password) {
@@ -34,7 +34,7 @@ const usuariosPut = async (req, res = response) => {
         const salt = bcryptjs.genSaltSync(); //10 por defecto
         resto.password = bcryptjs.hashSync(password, salt);
     }
-
+    
     const usuario = await Usuario.findByIdAndUpdate(id, resto);
 
     res.json({usuario});
@@ -68,8 +68,10 @@ const usuariosDelete = async (req, res = response) => {
 
     // const usuario = await Usuario.findByIdAndDelete(id);
     const usuario = await Usuario.findByIdAndUpdate(id, {estado: false});
+    
+    const usuarioAutenticado = req.usuario;
 
-    res.json(usuario);
+    res.json({usuario, usuarioAutenticado});
 };
 
 module.exports = {
