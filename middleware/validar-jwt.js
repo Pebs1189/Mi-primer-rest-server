@@ -35,6 +35,4 @@ const validarJWT = async (req, res = response, next) => {
     }
 };
 
-module.exports = {
-    validarJWT
-}
+module.exports = validarJWT;
