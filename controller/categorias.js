@@ -1,6 +1,11 @@
 const { response } = require("express");
 const { Categoria } = require('../models');
 
+/*
+* categoriasGET:
+* {{url}}/api/categoria/ --> return todas las categorias con estado a true (máx: 10)
+* {{url}}/api/categoria/id --> return la categoria con el id correspondiente y el usuario que lo creó
+*/
 const categoriasGet = async (req, res = response) => {
     const {limit=10, desde=0} = req.query;
     const query = {estado:true};
@@ -8,7 +13,7 @@ const categoriasGet = async (req, res = response) => {
     let data = {};
 
     if (id) {
-        //muestra la categoría y los datos del usuario que lo creó
+        //populate: usa la ref del schema para obtener el objeto referido
         const {_id, nombre, estado, usuario} = await Categoria.findById(id)
             .populate('usuario');
 
@@ -18,8 +23,8 @@ const categoriasGet = async (req, res = response) => {
         const resp = await Promise.all([
             Categoria.countDocuments(query), //total categorias
             Categoria.find(query)            //resultado de la busqueda
-                .limit(Number(limit))
-                .skip(Number(desde))
+                .limit(Number(limit))        //max resultado a mostrar
+                .skip(Number(desde))         //muestra a partir del resultado x 
         ]);
 
         //destructuración de arreglos [total de registros, resultado de la busqueda]
