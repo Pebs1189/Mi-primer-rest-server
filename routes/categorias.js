@@ -1,7 +1,7 @@
 const { Router, response } = require('express');
 const { check } = require('express-validator');
 
-const {validarCampos, validarJWT} = require('../middleware')
+const {validarCampos, validarJWT, esAdminRol, tieneRol} = require('../middleware')
 const {
     crearCategoria, 
     categoriasDelete,
@@ -17,7 +17,7 @@ const router = Router();
 * {{url}}/api/categorias
 */
 
-//obtener todas las categorias - paginado - total - populate 
+//obtener todas las categorias - paginado - total 
 router.get('/', categoriasGet );
 
 //obtener una categoria por id - populate
@@ -36,17 +36,21 @@ router.post('/',[
 
 //Actualizar categoria - privado - cualquiera con token válido
 router.put('/:id', [
-
+    check('id', 'No es un ID válido').isMongoId(),
+    check('id').custom( existeCategoriaPorID ),
+    check('nombre', 'El nombre es obligatorio').not().isEmpty(),
+    validarCampos
 ], categoriasPut );
 
 //Borrar una categoria - Admin (estado a false)
 router.delete('/:id',[
-
+    validarJWT,
+    esAdminRol,
+    tieneRol('ADMIN_ROLE', 'VENTAS_ROLE', 'USER_ROLE'),
+    check('id', 'No es un ID válido').isMongoId(),
+    check('id').custom( existeCategoriaPorID ),
+    validarCampos
 ], categoriasDelete );
-
-
-
-
 
 
 module.exports = router;

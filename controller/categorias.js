@@ -25,6 +25,7 @@ const categoriasGet = async (req, res = response) => {
             Categoria.find(query)            //resultado de la busqueda
                 .limit(Number(limit))        //max resultado a mostrar
                 .skip(Number(desde))         //muestra a partir del resultado x 
+                .populate('usuario')
         ]);
 
         //destructuración de arreglos [total de registros, resultado de la busqueda]
@@ -39,8 +40,13 @@ const categoriasGet = async (req, res = response) => {
     res.json(data);
 };
 
+/*
+* crearCategoria:
+* {{url}}api/categorias --> return error status 400 si la categoría ya existe
+* headers --> x-token (usuario atutenticado)
+* body --> {"nombre":"nuevoNombre"}
+*/
 const crearCategoria = async (req, res = response) => {
-
     const nombre = req.body.nombre.toUpperCase();
     const categoriaDB = await Categoria.findOne({nombre});
     
@@ -61,12 +67,34 @@ const crearCategoria = async (req, res = response) => {
     res.status(201).json(categoria);
 };
 
+/**
+ * categoriasPut:
+ * {{url}}api/categorias/60afb29bf3cfec3cb4c60dbd --> return la categoría con el nombre actualizado
+ * header --> x_token 
+ * body --> nombre (valor a actualizar)
+ */
 const categoriasPut = async (req, res = response) => {
-    res.json({msg:'put'});
+    const {id} = req.params;
+    const {nombre} = req.body;
+
+    //Se le pasa el documento con los campos a actualizar
+    const categoria = await Categoria.findByIdAndUpdate(id, {nombre});
+
+    res.json({categoria});
 };
 
+/**
+ * categoriasDelete:
+ * {{url}}api/categorias/id --> return la categoria borrada (estado = false)
+ * header --> x-token (válido)
+ */
 const categoriasDelete = async (req, res = responde) => {
-    res.json({msg:'delete'});
+     const {id} = req.params;
+
+     //Es más eficiente utilizar findbyidandupdate que el save
+     const categoria = await Categoria.findByIdAndUpdate(id, {estado:false});
+
+     res.json(categoria);
 };
 
 module.exports = {
