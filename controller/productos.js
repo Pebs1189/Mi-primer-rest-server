@@ -89,7 +89,7 @@ const postProducto = async (req, res = response) => {
 
 /**
  * putProducto:
- * {{url}}api/producto/60b804f1d8363b0ad8b91393 --> return producto con la variable actualizada
+ * {{url}}api/productos/60b804f1d8363b0ad8b91393 --> return producto con la variable actualizada
  * header --> x_token 
  * body --> {
     "precio":320,
@@ -106,9 +106,24 @@ const postProducto = async (req, res = response) => {
     res.json({producto});
 };
 
+/**
+ * deleteProducto:
+ * {{url}}api/productos/id --> return el producto borrado (estado = false)
+ * header --> x-token (válido)
+ */
+ const deleteProducto = async (req, res = responde) => {
+    const {id} = req.params;
+
+    //Es más eficiente utilizar findbyidandupdate que el save
+    const producto = await Producto.findByIdAndUpdate(id, {estado:false});
+
+    res.json(producto);
+};
+
 
 module.exports = {
     postProducto,
     getProductos,
-    putProducto
+    putProducto,
+    deleteProducto
 };

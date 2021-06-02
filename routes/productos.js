@@ -4,7 +4,8 @@ const { check } = require('express-validator');
 const {
     postProducto,
     getProductos,
-    putProducto
+    putProducto,
+    deleteProducto
 } = require('../controller');
 
 const { existeCategoriaPorID, existeProductoPorID} = require('../helpers/db-validators');
@@ -51,9 +52,14 @@ router.put('/:id', [
     validarCampos
 ], putProducto);
 
-router.delete('/:id', (req, res = response) => {
-    res.json({msg:'delete Producto'})
-} );
+router.delete('/:id', [
+    validarJWT,
+    esAdminRol,
+    tieneRol('ADMIN_ROLE', 'VENTAS_ROLE', 'USER_ROLE'),
+    check('id', 'No es un ID válido').isMongoId(),
+    check('id', 'El producto no existe').custom( existeProductoPorID ),
+    validarCampos
+],  deleteProducto );
 
 
 module.exports = router;
