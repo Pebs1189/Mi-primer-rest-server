@@ -16,7 +16,7 @@ const usuariosGet = async (req, res = response) => {
     ]);
 
     //destructuración de arreglos
-    const [total, usuarios] = resp;
+    const [total, usuarios] = res;
 
     res.json({
         total,
