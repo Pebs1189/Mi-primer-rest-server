@@ -32,9 +32,9 @@ router.post('/',[
 
 //Actualizar categoria - privado - cualquiera con token válido
 router.put('/:id', [
+    validarJWT,
     check('id', 'No es un ID válido').isMongoId(),
     check('id').custom( existeCategoriaPorID ),
-    check('nombre', 'El nombre es obligatorio').not().isEmpty(),
     validarCampos
 ], categoriasPut );
 

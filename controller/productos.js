@@ -2,9 +2,9 @@ const { response } = require("express");
 const { Producto } = require('../models');
 
 /*
-* categoriasGET:
-* {{url}}/api/categoria/ --> return todas las categorias con estado a true (máx: 10)
-* {{url}}/api/categoria/id --> return la categoria con el id correspondiente y el usuario que lo creó
+* getProductos:
+* {{url}}/api/productos/ --> return todos los productos con estado a true (máx: 10)
+* {{url}}/api/productos/id --> return el producto con el id correspondiente y el usuario que lo creó
 */
 const getProductos = async (req, res = response) => {
     const {limit=10, desde=0} = req.query;
@@ -87,7 +87,28 @@ const postProducto = async (req, res = response) => {
     res.status(201).json(producto);
 };
 
+/**
+ * putProducto:
+ * {{url}}api/producto/60b804f1d8363b0ad8b91393 --> return producto con la variable actualizada
+ * header --> x_token 
+ * body --> {
+    "precio":320,
+    "disponible" :true
+}
+ */
+ const putProducto = async (req, res = response) => {
+    const {id} = req.params;
+    const data = req.body;
+
+    //Se le pasa el documento con los campos a actualizar
+    const producto = await Producto.findByIdAndUpdate(id, data);
+
+    res.json({producto});
+};
+
+
 module.exports = {
     postProducto,
-    getProductos
+    getProductos,
+    putProducto
 };
