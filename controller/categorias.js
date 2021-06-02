@@ -25,7 +25,7 @@ const categoriasGet = async (req, res = response) => {
             Categoria.find(query)            //resultado de la busqueda
                 .limit(Number(limit))        //max resultado a mostrar
                 .skip(Number(desde))         //muestra a partir del resultado x 
-                .populate('usuario')
+                .populate('usuario','nombre')
         ]);
 
         //destructuración de arreglos [total de registros, resultado de la busqueda]
@@ -75,7 +75,7 @@ const crearCategoria = async (req, res = response) => {
  */
 const categoriasPut = async (req, res = response) => {
     const {id} = req.params;
-    const {nombre} = req.body;
+    const {usuario, nombre, ...resto} = req.body;
 
     //Se le pasa el documento con los campos a actualizar
     const categoria = await Categoria.findByIdAndUpdate(id, {nombre});

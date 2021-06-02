@@ -18,4 +18,11 @@ const CategoriaSchema = Schema({
     }
 });
 
+//Quita del esquema el password y la versión
+CategoriaSchema.methods.toJSON = function () {
+    const {__v, estado, _id, ...categoria } = this.toObject();
+
+    return categoria;
+}
+
 module.exports = model('Categoria', CategoriaSchema);

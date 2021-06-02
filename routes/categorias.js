@@ -13,10 +13,6 @@ const {existeCategoriaPorID} = require('../helpers/db-validators');
 
 const router = Router();
 
-/*
-* {{url}}/api/categorias
-*/
-
 //obtener todas las categorias - paginado - total 
 router.get('/', categoriasGet );
 
