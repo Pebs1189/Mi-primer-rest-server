@@ -1,24 +1,31 @@
 const { Router, response } = require('express');
 const { check } = require('express-validator');
 
-const {postProducto} = require('../controller');
+const {
+    postProducto,
+    getProductos
+} = require('../controller');
+
 const { existeCategoriaPorID } = require('../helpers/db-validators');
 
-const {validarCampos, validarJWT, esAdminRol, tieneRol} = require('../middleware')
-// const {} = require('../controller/categorias');
-// const {} = require('../helpers/db-validators');
+const {
+    validarCampos, 
+    validarJWT,
+    esAdminRol,
+    tieneRol
+} = require('../middleware')
+
+
 
 const router = Router();
 
 //obtener todas las categorias - paginado - total 
-router.get('/', (req, res = response) => {
-    res.json({msg:'Get All'})
-} );
+router.get('/', getProductos);
 
 //obtener una categoria por id - populate
-router.get('/:id', (req, res = response) => {
-    res.json({msg:'Get by ID'})
-} );
+router.get('/:id', [
+
+], getProductos);
 
 //Crear categoria - privado - cualquier persona con un token válido
 router.post('/', [

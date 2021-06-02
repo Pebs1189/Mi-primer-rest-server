@@ -1,6 +1,47 @@
 const { response } = require("express");
 const { Producto } = require('../models');
 
+/*
+* categoriasGET:
+* {{url}}/api/categoria/ --> return todas las categorias con estado a true (máx: 10)
+* {{url}}/api/categoria/id --> return la categoria con el id correspondiente y el usuario que lo creó
+*/
+const getProductos = async (req, res = response) => {
+    const {limit=10, desde=0} = req.query;
+    const query = {estado:true};
+    const {id} = req.params;
+    let data = {};
+
+    if (id) {
+        //populate: usa la ref del schema para obtener el objeto referido
+        const {_id, nombre, estado, usuario} = await Producto.findById(id)
+            .populate({path:'usuario', select: 'nombre'})
+            .populate({path:'usuario', select: 'rol'})
+            .populate('categoria', 'nombre');
+
+        data = {id:_id, nombre, estado, usuario};
+    } else {
+        //paginacion de resiltado
+        const resp = await Promise.all([
+            Producto.countDocuments(query), //total categorias
+            Producto.find(query)            //resultado de la busqueda
+                .limit(Number(limit))        //max resultado a mostrar
+                .skip(Number(desde))         //muestra a partir del resultado x 
+                .populate('usuario','nombre')
+                .populate('categoria','nombre')
+        ]);
+
+        //destructuración de arreglos [total de registros, resultado de la busqueda]
+        const [total, productos] = resp;
+
+        data = {
+            total,
+            productos
+        };
+    }
+
+    res.json(data);
+};
 
 /*
 * postProducto:
@@ -39,4 +80,7 @@ const postProducto = async (req, res = response) => {
     res.status(201).json(producto);
 };
 
-module.exports = {postProducto};
+module.exports = {
+    postProducto,
+    getProductos
+};
