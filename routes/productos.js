@@ -6,7 +6,7 @@ const {
     getProductos
 } = require('../controller');
 
-const { existeCategoriaPorID } = require('../helpers/db-validators');
+const { existeCategoriaPorID, existeProductoPorID} = require('../helpers/db-validators');
 
 const {
     validarCampos, 
@@ -15,16 +15,20 @@ const {
     tieneRol
 } = require('../middleware')
 
-
-
 const router = Router();
+
+/**
+ * CRUD Producto
+ */
 
 //obtener todas las categorias - paginado - total 
 router.get('/', getProductos);
 
 //obtener una categoria por id - populate
 router.get('/:id', [
-
+    check('id', 'No es un ID válido').isMongoId(),
+    check('id', 'El producto no existe').custom( existeProductoPorID ),
+    validarCampos
 ], getProductos);
 
 //Crear categoria - privado - cualquier persona con un token válido

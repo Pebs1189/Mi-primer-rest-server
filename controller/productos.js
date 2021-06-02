@@ -13,13 +13,20 @@ const getProductos = async (req, res = response) => {
     let data = {};
 
     if (id) {
-        //populate: usa la ref del schema para obtener el objeto referido
-        const {_id, nombre, estado, usuario} = await Producto.findById(id)
+        // //populate: usa la ref del schema para obtener el objeto referido
+        const {_id,
+            nombre, 
+            precio, 
+            descripcion,
+            disponible,
+            usuario, 
+            categoria
+        } = await Producto.findById(id)
             .populate({path:'usuario', select: 'nombre'})
             .populate({path:'usuario', select: 'rol'})
             .populate('categoria', 'nombre');
 
-        data = {id:_id, nombre, estado, usuario};
+        data = {id:_id, nombre, precio, descripcion, disponible, usuario, categoria};
     } else {
         //paginacion de resiltado
         const resp = await Promise.all([
