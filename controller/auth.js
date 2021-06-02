@@ -1,11 +1,21 @@
 const {response} = require('express');
-const Usuario = require('../models/usuario');
 const bcryptjs = require('bcryptjs');
+
+const {Usuario} = require('../models');
+
 const { generarJWT } = require('../helpers/generar-jwt');
 const {googleVerify} = require('../helpers/google-verify');
 
-const login = async (req, res = response) => {
 
+/**
+ * login:
+ * {{url}}api/auth/login --> return la info del usuario autenticado y su token activo
+ * body --> {
+    "correo":"test1@yahoo.com",
+    "password":"123456"
+}
+ */
+const login = async (req, res = response) => {
     const {correo, password} = req.body;
 
     try {
@@ -32,6 +42,10 @@ const login = async (req, res = response) => {
     }
 };
 
+/**
+ * googleSignin:
+ * guarda la info del usuario de inicio sesion de google (no funciona si se intenta logear con login usuario normal)
+ */
 const googleSignin = async (req, res = response) => {
     const {id_token} = req.body;
 
@@ -43,7 +57,7 @@ const googleSignin = async (req, res = response) => {
             const data = {
                 nombre,
                 correo,
-                password: ':P',
+                password: '123456',
                 img,
                 google: true
             };

@@ -7,7 +7,7 @@ const {
     categoriasDelete,
     categoriasGet, 
     categoriasPut
-} = require('../controller/categorias');
+} = require('../controller');
 
 const {existeCategoriaPorID} = require('../helpers/db-validators');
 
