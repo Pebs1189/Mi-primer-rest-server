@@ -1,0 +1,27 @@
+Para habilitar ejecutar typescript--> Set-ExecutionPolicy Unrestricted    <--- admin needed
+
+Hola, de casualidad vi tu vídeo y me pareció bastante interesante tu curva de aprendizaje. Solo quería dejarte un par de consejos:
+- No mezcles Backend con Frontend: Las arquitecturas monolíticas al principio parecen muy fáciles y rápidas de trabajar, pero a medida que el proyecto crece se hace cada 
+  vez más y más difícil de mantener y de agregar nuevas características. Además te darás cuenta que renderizar HTML en el servidor con motores de maquetación como PUG o Handlebars
+  es bastante costoso a nivel de recursos, por lo que eventualmente con un gran flujo de usuarios empezará a competir por recursos trabajos del servidor con el motor de renderizado. 
+  Te recomiendo que empieces con frameworks como Vue o Knockout, cuando tengas más experiencia podrás ver otros frameworks más avanzados como React o Angular
+
+- Valida y sanitiza datos: Toda la información proveniente desde el mundo exterior debe ser validada, así sea información "confiable" proveniente de un FrontEnd. No vi mucho tu código 
+  pero vi una parte en el vídeo en el que agregabas directamente el cuerpo de la petición a una consulta SQL, aprenderás que esto es muy inseguro porque es susceptible a un ataque de 
+  inyección de SQL. Para esto te recomiendo la librería express-validator
+
+- Usar variables de entorno: Vi en algunas partes que tenías valores quemados directamente en el código, como por ejemplo el secreto para generar las cookies de sesiones. 
+  Esto es una mala practica porque como estás usando GIT como gestor de versiones estás guardando todo eso en el repositorio, por lo que cualquiera que tenga acceso al 
+  repositorio podrá generar y/o suplantar una sesión en el servidor y robarte toda la información. También a futuro te puede complicar tener múltiples 
+  ambientes (QA - Producción). Te recomiendo usar una librería llamada dotenv, que por medio de un archivo .env te permite cargar todas tus variables y accederlas desde process.env
+
+APRENDER:
+  Frontend 
+	- Inicio: 
+		 Vue.js
+	- Final:
+		 React o Angular
+  Backend
+	NodeJS + Express
+	MySQL o MongoDB
+	REST API
