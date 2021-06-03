@@ -4,7 +4,7 @@ const { buscar } = require('../controller');
 const router = new Router();
 
 /**
- * API REST de busquedas
+ * Ruta de busquedas
  */
 router.get('/:coleccion/:termino', buscar);
 

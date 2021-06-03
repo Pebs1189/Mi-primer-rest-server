@@ -30,7 +30,7 @@ const ProductoSchema = Schema({
     },
     disponible: {
         type: Boolean,
-        defailt: true
+        default: true
     }
 });
 
