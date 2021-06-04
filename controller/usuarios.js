@@ -8,20 +8,25 @@ const usuariosGet = async (req, res = response) => {
     const query = {estado:true};
    
     //paginación de resultados, se usa Promise.all para mejorar el rendimiento
-    const resp = await Promise.all([
-        Usuario.countDocuments(query),
-        Usuario.find(query)
-            .limit(Number(limit))
-            .skip(Number(desde))
-    ]);
+    try {
+        const resp = await Promise.all([
+            Usuario.countDocuments(query),
+            Usuario.find(query)
+                .limit(Number(limit))
+                .skip(Number(desde))
+        ]);
+    
+        //destructuración de arreglos
+        const [total, usuarios] = resp;
+    
+        res.json({
+            total,
+            usuarios
+        });
+    } catch (error) {
+        console.log(error);
+    }
 
-    //destructuración de arreglos
-    const [total, usuarios] = res;
-
-    res.json({
-        total,
-        usuarios
-    });
 };
 
 const usuariosPut = async (req, res = response) => {
@@ -34,9 +39,13 @@ const usuariosPut = async (req, res = response) => {
         resto.password = bcryptjs.hashSync(password, salt);
     }
     
-    const usuario = await Usuario.findByIdAndUpdate(id, resto);
+    try {
+        const usuario = await Usuario.findByIdAndUpdate(id, resto);
 
-    res.json({usuario});
+        res.json({usuario});
+    } catch (error) {
+        console.log(error);
+    }
 };
 
 const usuariosPost = async (req, res = response) => {
@@ -48,11 +57,15 @@ const usuariosPost = async (req, res = response) => {
     usuario.password = bcryptjs.hashSync(password, salt);
 
     //guardar en DB
-    await usuario.save();
+    try {
+        await usuario.save();
 
-    res.json({
-        usuario
-    });
+        res.json({
+            usuario
+        });
+    } catch (error) {
+        console.log(error);
+    }
 };
 
 const usuariosPatch = (req, res = response) => {
@@ -66,11 +79,15 @@ const usuariosDelete = async (req, res = response) => {
     const {id} = req.params;
 
     // const usuario = await Usuario.findByIdAndDelete(id);
-    const usuario = await Usuario.findByIdAndUpdate(id, {estado: false});
+    try {
+        const usuario = await Usuario.findByIdAndUpdate(id, {estado: false});
     
-    const usuarioAutenticado = req.usuario;
-
-    res.json(usuario);
+        const usuarioAutenticado = req.usuario;
+    
+        res.json(usuario);
+    } catch (error) {
+        console.log(error);
+    }
 };
 
 module.exports = {

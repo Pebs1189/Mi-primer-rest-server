@@ -17,9 +17,13 @@ const cargarArchivo = async (req, res = response) => {
 
     console.log('req.files >>>', req.files); // eslint-disable-line
 
-    const pathCompleto = await subirArchivo(req.files);
+    try {
+        const pathCompleto = await subirArchivo(req.files);
 
-    res.json({nombre: pathCompleto});  
+        res.json({nombre: pathCompleto});  
+    } catch (error) {
+        console.log(error);
+    }
 };
 
 module.exports = {

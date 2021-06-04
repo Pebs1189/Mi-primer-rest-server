@@ -14,37 +14,47 @@ const getProductos = async (req, res = response) => {
 
     if (id) {
         // //populate: usa la ref del schema para obtener el objeto referido
-        const {_id,
-            nombre, 
-            precio, 
-            descripcion,
-            disponible,
-            usuario, 
-            categoria
-        } = await Producto.findById(id)
-            .populate({path:'usuario', select: 'nombre'})
-            .populate({path:'usuario', select: 'rol'})
-            .populate('categoria', 'nombre');
 
-        data = {id:_id, nombre, precio, descripcion, disponible, usuario, categoria};
+        try {
+            const {_id,
+                nombre, 
+                precio, 
+                descripcion,
+                disponible,
+                usuario, 
+                categoria
+            } = await Producto.findById(id)
+                .populate({path:'usuario', select: 'nombre'})
+                .populate({path:'usuario', select: 'rol'})
+                .populate('categoria', 'nombre');
+    
+            data = {id:_id, nombre, precio, descripcion, disponible, usuario, categoria};
+        } catch (error) {
+            console.log(error);
+        }
+
     } else {
-        //paginacion de resiltado
-        const resp = await Promise.all([
-            Producto.countDocuments(query), //total categorias
-            Producto.find(query)            //resultado de la busqueda
-                .limit(Number(limit))        //max resultado a mostrar
-                .skip(Number(desde))         //muestra a partir del resultado x 
-                .populate('usuario','nombre')
-                .populate('categoria','nombre')
-        ]);
+        try {
+            //paginacion de resiltado
+            const resp = await Promise.all([
+                Producto.countDocuments(query), //total categorias
+                Producto.find(query)            //resultado de la busqueda
+                    .limit(Number(limit))        //max resultado a mostrar
+                    .skip(Number(desde))         //muestra a partir del resultado x 
+                    .populate('usuario','nombre')
+                    .populate('categoria','nombre')
+            ]);
 
-        //destructuración de arreglos [total de registros, resultado de la busqueda]
-        const [total, productos] = resp;
+            //destructuración de arreglos [total de registros, resultado de la busqueda]
+            const [total, productos] = resp;
 
-        data = {
-            total,
-            productos
-        };
+            data = {
+                total,
+                productos
+            };
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     res.json(data);
@@ -80,11 +90,15 @@ const postProducto = async (req, res = response) => {
     };
 
     //crear la cateogría
-    const producto = await new Producto(data);
-    //guardar en DB
-    await producto.save();
-
-    res.status(201).json(producto);
+    try {
+        const producto = await new Producto(data);
+        //guardar en DB
+        await producto.save();
+    
+        res.status(201).json(producto);
+    } catch (error) {
+        console.log(error);
+    }
 };
 
 /**
@@ -101,9 +115,13 @@ const postProducto = async (req, res = response) => {
     const data = req.body;
 
     //Se le pasa el documento con los campos a actualizar
-    const producto = await Producto.findByIdAndUpdate(id, data);
+    try {
+        const producto = await Producto.findByIdAndUpdate(id, data);
 
-    res.json({producto});
+        res.json({producto});
+    } catch (error) {
+        console.log(error);
+    }
 };
 
 /**
@@ -115,9 +133,13 @@ const postProducto = async (req, res = response) => {
     const {id} = req.params;
 
     //Es más eficiente utilizar findbyidandupdate que el save
-    const producto = await Producto.findByIdAndUpdate(id, {estado:false});
+    try {
+        const producto = await Producto.findByIdAndUpdate(id, {estado:false});
 
-    res.json(producto);
+        res.json(producto);
+    } catch (error) {
+        console.log(error);
+    }
 };
 
 

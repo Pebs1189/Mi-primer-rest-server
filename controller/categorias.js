@@ -92,9 +92,13 @@ const categoriasDelete = async (req, res = responde) => {
      const {id} = req.params;
 
      //Es más eficiente utilizar findbyidandupdate que el save
-     const categoria = await Categoria.findByIdAndUpdate(id, {estado:false});
+    try {
+        const categoria = await Categoria.findByIdAndUpdate(id, {estado:false});
 
-     res.json(categoria);
+        res.json(categoria);
+    } catch (error) {
+        console.log(error);
+    }
 };
 
 module.exports = {
