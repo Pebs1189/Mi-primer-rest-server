@@ -14,27 +14,35 @@ const categoriasGet = async (req, res = response) => {
 
     if (id) {
         //populate: usa la ref del schema para obtener el objeto referido
-        const {_id, nombre, estado, usuario} = await Categoria.findById(id)
+        try {
+            const {_id, nombre, estado, usuario} = await Categoria.findById(id)
             .populate('usuario');
 
-        data = {id:_id, nombre, estado, usuario};
+            data = {id:_id, nombre, estado, usuario};
+        } catch (error) {
+            res.status(400).json({msg:error});
+        }
     } else {
         //paginacion de resiltado
-        const resp = await Promise.all([
-            Categoria.countDocuments(query), //total categorias
-            Categoria.find(query)            //resultado de la busqueda
-                .limit(Number(limit))        //max resultado a mostrar
-                .skip(Number(desde))         //muestra a partir del resultado x 
-                .populate('usuario','nombre')
-        ]);
-
-        //destructuración de arreglos [total de registros, resultado de la busqueda]
-        const [total, categorias] = resp;
-
-        data = {
-            total,
-            categorias
-        };
+        try {
+            const resp = await Promise.all([
+                Categoria.countDocuments(query), //total categorias
+                Categoria.find(query)            //resultado de la busqueda
+                    .limit(Number(limit))        //max resultado a mostrar
+                    .skip(Number(desde))         //muestra a partir del resultado x 
+                    .populate('usuario','nombre')
+            ]);
+    
+            //destructuración de arreglos [total de registros, resultado de la busqueda]
+            const [total, categorias] = resp;
+    
+            data = {
+                total,
+                categorias
+            };
+        } catch (error) {
+            res.status(400).json({msg:error});
+        }
     }
 
     res.json(data);
@@ -60,11 +68,15 @@ const crearCategoria = async (req, res = response) => {
     };
 
     //crear la cateogría
-    const categoria = await new Categoria(data);
-    //guardar en DB
-    await categoria.save();
-
-    res.status(201).json(categoria);
+    try {
+        const categoria = await new Categoria(data);
+        //guardar en DB
+        await categoria.save();
+    
+        res.status(201).json(categoria);
+    } catch (error) {
+        res.status(400).json({msg:error});
+    }
 };
 
 /**
@@ -78,9 +90,13 @@ const categoriasPut = async (req, res = response) => {
     const {usuario, nombre, ...resto} = req.body;
 
     //Se le pasa el documento con los campos a actualizar
-    const categoria = await Categoria.findByIdAndUpdate(id, {nombre});
+    try {
+        const categoria = await Categoria.findByIdAndUpdate(id, {nombre});
 
-    res.json({categoria});
+        res.json({categoria});
+    } catch (error) {
+        res.status(400).json({msg:error});
+    }
 };
 
 /**
@@ -97,7 +113,7 @@ const categoriasDelete = async (req, res = responde) => {
 
         res.json(categoria);
     } catch (error) {
-        console.log(error);
+        res.status(400).json({msg:error});
     }
 };
 

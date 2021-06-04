@@ -24,7 +24,7 @@ const usuariosGet = async (req, res = response) => {
             usuarios
         });
     } catch (error) {
-        console.log(error);
+        res.status(400).json({msg:error});
     }
 
 };
@@ -44,7 +44,7 @@ const usuariosPut = async (req, res = response) => {
 
         res.json({usuario});
     } catch (error) {
-        console.log(error);
+        res.status(400).json({msg:error});
     }
 };
 
@@ -64,7 +64,7 @@ const usuariosPost = async (req, res = response) => {
             usuario
         });
     } catch (error) {
-        console.log(error);
+        res.status(400).json({msg:error});
     }
 };
 
@@ -86,7 +86,7 @@ const usuariosDelete = async (req, res = response) => {
     
         res.json(usuario);
     } catch (error) {
-        console.log(error);
+        res.status(400).json({msg:error});
     }
 };
 

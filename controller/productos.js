@@ -30,7 +30,7 @@ const getProductos = async (req, res = response) => {
     
             data = {id:_id, nombre, precio, descripcion, disponible, usuario, categoria};
         } catch (error) {
-            console.log(error);
+            res.status(400).json({msg:error});
         }
 
     } else {
@@ -53,7 +53,7 @@ const getProductos = async (req, res = response) => {
                 productos
             };
         } catch (error) {
-            console.log(error);
+            res.status(400).json({msg:error});
         }
     }
 
@@ -97,7 +97,7 @@ const postProducto = async (req, res = response) => {
     
         res.status(201).json(producto);
     } catch (error) {
-        console.log(error);
+        res.status(400).json({msg:error});
     }
 };
 
@@ -120,7 +120,7 @@ const postProducto = async (req, res = response) => {
 
         res.json({producto});
     } catch (error) {
-        console.log(error);
+        res.status(400).json({msg:error});
     }
 };
 
@@ -138,7 +138,7 @@ const postProducto = async (req, res = response) => {
 
         res.json(producto);
     } catch (error) {
-        console.log(error);
+        res.status(400).json({msg:error});
     }
 };
 

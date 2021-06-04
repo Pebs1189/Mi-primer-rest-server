@@ -26,10 +26,20 @@ const existeProductoPorID = async (producto = '') => {
     if (!existeProducto) throw new Error(`La categoría ${producto} no existe.`);
 }; 
 
+const validarColeccionesPermitidas = (coleccion = '', colecciones = []) => {
+    const incluida = colecciones.includes(coleccion);
+    if (!incluida) {
+        throw new Error(`La colección ${coleccion} no está permitida: ${colecciones}`);
+    }
+
+    return true;
+};
+
 module.exports = {
     esRolValido,
     existeEmail,
     existeUsuarioPorId,
     existeCategoriaPorID,
-    existeProductoPorID
+    existeProductoPorID,
+    validarColeccionesPermitidas
 }
