@@ -145,8 +145,44 @@ const mostrarImagen = async (req, res = response) => {
     }
 };
 
+const mostrarImagenCloudinay = async (req, res = response) => {
+    const {coleccion, id} = req.params;
+
+    let modelo;
+
+    switch (coleccion) {
+        case 'usuarios':
+            modelo = await Usuario.findById(id);
+            if (!modelo) {
+                return res.status(400).json({msg: `No existe el usuario con el id ${id}`});
+            }
+            break;
+        case 'productos':
+            modelo = await Producto.findById(id);
+            if (!modelo) {
+                return res.status(400).json({msg: `No existe el producto con el id ${id}`});
+            }
+            break;
+        default:
+            return res.status(500).json({msg:'Se me olvidó validar esto'});
+            break;
+    }
+ 
+    try {
+        if (modelo.img) {
+            const pathImg = modelo.img;
+            return res.send(pathImg);
+        } else {
+            const pathDefault = path.join(__dirname, '../assets', 'no-image.jpg');
+            return res.sendFile(pathDefault);
+        }
+    } catch (error) {
+        res.status(400).json({msg:error});
+    }
+};
+
 module.exports = {
     cargarArchivo,
-    mostrarImagen,
-    actualizarImagenCloudinary
+    actualizarImagenCloudinary,
+    mostrarImagenCloudinay
 };

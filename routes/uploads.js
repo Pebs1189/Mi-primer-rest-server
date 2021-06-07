@@ -4,7 +4,7 @@ const {check} = require('express-validator');
 const { 
     cargarArchivo ,
     actualizarImagenCloudinary,
-    mostrarImagen
+    mostrarImagenCloudinay
 } = require('../controller');
 
 const {
@@ -26,7 +26,7 @@ router.get('/:coleccion/:id', [
     check('id','El id debe ser válido').isMongoId(),
     check('coleccion', '').custom(c => validarColeccionesPermitidas (c, ['usuarios', 'productos'])),
     validarCampos
-], mostrarImagen);
+], mostrarImagenCloudinay);
 
 router.post('/', validarArchivoSubir, cargarArchivo);
 
