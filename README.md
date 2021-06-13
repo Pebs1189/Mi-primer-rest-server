@@ -1,4 +1,4 @@
-# How is the wheater - Console APP.
+# My first API rest server
 
 ### Description
 Simple console application where you can search how is the wheater in the place what want to know it.
